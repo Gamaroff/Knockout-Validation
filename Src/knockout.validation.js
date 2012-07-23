@@ -1,11 +1,11 @@
 /*
-*   Knockout Validation
-*   Created By Eric M. Barnard (https://github.com/ericmbarnard)
-*
-*   Source: https://github.com/ericmbarnard/Knockout-Validation
-*   MIT License: http://www.opensource.org/licenses/MIT
-*/
-(function () {
+ *   Knockout Validation
+ *   Created By Eric M. Barnard (https://github.com/ericmbarnard)
+ *
+ *   Source: https://github.com/ericmbarnard/Knockout-Validation
+ *   MIT License: http://www.opensource.org/licenses/MIT
+ */
+define(['knockout'],function (ko) {
 
     if (typeof (ko) === undefined) { throw 'Knockout is required, please ensure it is loaded before loading this validation plug-in'; }
 
@@ -172,44 +172,44 @@
             // }
             group: function group(obj, options) { // array of observables or viewModel
                 var options = ko.utils.extend(configuration.grouping, options),
-                validatables = ko.observableArray([]),
-                result = null,
+                    validatables = ko.observableArray([]),
+                    result = null,
 
                 //anonymous, immediate function to traverse objects hierarchically
                 //if !options.deep then it will stop on top level
-                traverse = function traverse(obj, level) {
-                    var objValues = [],
-                        val = ko.utils.unwrapObservable(obj);
+                    traverse = function traverse(obj, level) {
+                        var objValues = [],
+                            val = ko.utils.unwrapObservable(obj);
 
-                    //default level value depends on deep option.
-                    level = (level !== undefined ? level : options.deep ? 1 : -1);
+                        //default level value depends on deep option.
+                        level = (level !== undefined ? level : options.deep ? 1 : -1);
 
-                    // if object is observable then add it to the list
-                    if (ko.isObservable(obj)) {
+                        // if object is observable then add it to the list
+                        if (ko.isObservable(obj)) {
 
-                        //make sure it is validatable object
-                        if (!obj.isValid) obj.extend({ validatable: true });
-                        validatables.push(obj);
-                    }
-
-                    //get list of values either from array or object but ignore non-objects
-                    if (val) {
-                        if (utils.isArray(val)) {
-                            objValues = val;
-                        } else if (utils.isObject(val)) {
-                            objValues = utils.values(val);
+                            //make sure it is validatable object
+                            if (!obj.isValid) obj.extend({ validatable: true });
+                            validatables.push(obj);
                         }
-                    }
 
-                    //process recurisvely if it is deep grouping
-                    if (level !== 0) {
-                        ko.utils.arrayForEach(objValues, function (observable) {
+                        //get list of values either from array or object but ignore non-objects
+                        if (val) {
+                            if (utils.isArray(val)) {
+                                objValues = val;
+                            } else if (utils.isObject(val)) {
+                                objValues = utils.values(val);
+                            }
+                        }
 
-                            //but not falsy things and not HTML Elements
-                            if (observable && !observable.nodeType) traverse(observable, level + 1);
-                        });
-                    }
-                };
+                        //process recurisvely if it is deep grouping
+                        if (level !== 0) {
+                            ko.utils.arrayForEach(objValues, function (observable) {
+
+                                //but not falsy things and not HTML Elements
+                                if (observable && !observable.nodeType) traverse(observable, level + 1);
+                            });
+                        }
+                    };
 
                 //if using observables then traverse structure once and add observables
                 if (options.observable) {
@@ -260,10 +260,10 @@
                 };
                 obj.isAnyMessageShown = function() {
                     var invalidAndModifiedPresent = false;
-                    
+
                     // ensure we have latest changes
                     result();
-                    
+
                     ko.utils.arrayForEach(validatables(), function (observable) {
                         if (!observable.isValid() && observable.isModified()) {
                             invalidAndModifiedPresent = true;
@@ -339,7 +339,7 @@
                     //          params: 2,
                     //          onlyIf: function() {
                     //                      return specialField.IsVisible();
-                    //                  }  
+                    //                  }
                     //      }
                     //  )};
                     //
@@ -528,7 +528,7 @@
             //if one want's to enforce entry it should be done with 'required: true'
             return utils.isEmptyVal(val) || (
                 validate && /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(val)
-            );
+                );
         },
         message: 'Please enter a proper email address'
     };
@@ -689,12 +689,12 @@
                 msg = null,
                 isModified = false,
                 isValid = false;
-                
+
             obsv.extend({ validatable: true });
 
             isModified = obsv.isModified();
             isValid = obsv.isValid();
-            
+
             // create a handler to correctly return an error message
             var errorMsgAccessor = function () {
                 if (!config.messagesOnModified || isModified) {
@@ -1025,4 +1025,4 @@
 
     //#endregion
 
-})();
+});
